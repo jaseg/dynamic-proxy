@@ -20,7 +20,7 @@ Dynamic proxy is a useful library for Java developers to generate proxy object. 
 
 Maven dependency:
 
-```
+```xml
 <dependency>
     <groupId>net.neoremind</groupId>
     <artifactId>dynamicproxy</artifactId>
@@ -32,7 +32,7 @@ Next, let us look at some examples of implementing dynamic proxy.
 ### 1.2 Creating invoker
 First, let us define an interface.
 
-```
+```java
 public interface EchoService {
     String echo(String message);
 }
@@ -46,7 +46,7 @@ By initiate `ProxyCreator` instance directly, you can get the specific code gene
 
 Invoker is very useful when implementing a RPC client, caller can depend on an interface, `ProxyCreator` creates a subclass that takes sufficient information to execute a remote call.
 
-```
+```java
 ProxyCreator proxyCreator = new CglibCreator();
 //  ProxyCreator proxyCreator = new ASMCreator();
 //  ProxyCreator proxyCreator = new JavassistCreator();
@@ -73,7 +73,7 @@ Here, you can define an `Interceptor` instance, for example you can manipulate t
 
 Note that this time, `ProxyCreator` is created by `DefaultProxyCreator` that looks up implementation of ProxyCreator through SPI, we will talk about this later in chapter 1.5.
 
-```
+```java
 ProxyCreator proxyCreator = new DefaultProxyCreator();
 Interceptor interceptor = new Interceptor() {
     @Override
@@ -92,7 +92,7 @@ Delegator is useful when you do not want to expose the real implementation out t
 
 The decorated `EchoService` implementation:
 
-```
+```java
 class DecoratorEchoService implements EchoService {
 
     private EchoService delegate;
@@ -117,7 +117,7 @@ class DecoratorEchoService implements EchoService {
 }
 ```
 
-```
+```java
 ProxyCreator proxyCreator = new DefaultProxyCreator();
 ObjectProvider objectProvider = new ObjectProvider() {
 
@@ -155,7 +155,7 @@ net.neoremind.dynamicproxy.impl.JavassistCreator
 ```
 
 When calling `ProxyUtil.getInstance()`, the capable `ProxyCreator` implementation will be look up automatically.
-```
+```java
 ProxyCreator proxyCreator = ProxyUtil.getInstance();
 EchoService service = proxyCreator.createInvokerProxy(new ObjectInvoker() {
     @Override
